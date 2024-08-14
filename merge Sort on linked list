@@ -1,0 +1,136 @@
+#include <iostream>
+using namespace std;
+class node
+{
+public:
+
+	int data;
+	node* next;
+	
+	node(int data)
+	{
+		this->data = data;
+		next = NULL;
+	}
+};
+node*find(node*head)
+{
+
+	//hare and tortoise method
+
+	node*slow = head;
+	node*fast = head->next;
+	while (fast != NULL&&fast->next!= NULL)
+	{
+		slow = slow->next;
+		fast = fast->next->next;
+	}
+	return slow;
+}
+node*merge_both(node*left,node*right)
+{
+	if(left==NULL)
+	{
+		return right;
+	}
+	if (right == NULL)
+	{
+		return left;
+
+	}
+
+	//dummy node
+	node*ans = new node(-1);
+		node*temp = ans;
+
+		while (left != NULL&&right != NULL)
+		{
+			if (left->data < right->data)
+			{
+				temp->next = left;
+				temp = left;
+				left = left->next;
+		    }
+			else
+			{
+				temp->next = right;
+				temp = right;
+				right = right->next;
+			}
+
+		}
+		while (left != NULL)
+		{
+			temp->next = left;
+			temp = left;
+			left = left->next;
+		}
+		while (right != NULL)
+		{
+			temp->next = right;
+			temp = right;
+			right = right->next;
+		}
+		temp = ans->next;
+		delete ans;
+		return temp;
+
+
+}
+node* merge_Sort(node*head)
+{
+	//first i will break it into two halves then sort them independently
+	if (head == NULL || head->next == NULL)
+	{
+
+		return head;
+	}
+		node* mid = find(head);
+		node*left= head;
+		node*right = mid->next;
+		mid->next = NULL;
+		left = merge_Sort(left);
+		right = merge_Sort(right);
+
+		//merging both left and right
+
+		node* ans = merge_both(left, right);
+		return ans;
+}
+void display(node*head)
+{
+	node* temp = head;
+	while (temp != NULL)
+	{
+		cout << temp->data << " ";
+		temp = temp->next;
+	}
+	cout << endl;
+}
+
+int main()
+{
+	node* head = new node(23);
+	head->next = new node(45);
+	head->next->next = new node(12);
+	head->next->next->next = new node(67);
+	head->next->next->next->next = new node(34);
+	display(head);
+
+	head = merge_Sort(head);
+	cout << "Sored linked list: " << endl;
+
+	display(head);
+	node* temp = head;
+	while (temp != NULL)
+	{
+		node* num= temp->next;
+		delete temp;
+		temp =  num;
+		
+	}
+	head = NULL;
+	system("pause");
+	return 0;
+}
+
