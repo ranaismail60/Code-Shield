@@ -1,0 +1,187 @@
+#include<iostream>
+using namespace std;
+
+class node
+{
+public:
+	int data;
+	node* next;
+	node(int data)
+	{
+		this->data = data;
+		next = NULL;
+	}
+	~node()
+	{
+		int val = this->data;
+		if (next != NULL)
+		{
+			next = NULL;
+		}
+		cout << "the node containing  " << val << " is deleted" << endl;
+	}
+};
+
+node* insert(int d, node* head)
+{
+	node* new_node = new node(d);
+	if (head == NULL)
+	{
+		return new_node;
+	}
+
+	new_node->next = head;
+	head = new_node;
+	return head;
+}
+
+
+void del_at_head(node*& head)
+{
+	if (head == NULL)
+	{
+		cout << "The list is empty." << endl;
+		return;
+	}
+
+
+	node* temp = head;
+	head = head->next;
+	delete temp;
+	temp = NULL;
+}
+
+void del_at_tail(node*head)
+{
+	node*temp = head;
+	if (head == NULL)
+	{
+		cout << "Plz Enter some nodes first" << endl;
+		return;
+	}
+	node*prev = NULL;
+	while (temp->next != NULL)
+	{
+		prev = temp;
+		temp = temp->next;
+	}
+	if (temp != NULL)
+	{
+		prev->next = NULL;
+		delete temp;
+		temp = NULL;
+	}
+
+}
+
+
+void del_at_pos(int pos, node*& head) 
+{
+	if (head == NULL) 
+	{
+		cout << "The linked list is empty." << endl;
+		return;
+	}
+
+
+	if (pos == 1)
+	{
+		del_at_head(head); 
+		return;
+	}
+
+	int cnt = 1;
+	node* prev = NULL;
+	node* temp = head;
+
+	
+	while (temp != NULL && cnt < pos)
+	{
+		prev = temp;
+		temp = temp->next;
+		cnt++;
+	}
+
+	
+	if (temp == NULL)
+	{
+		cout << "Position out of bounds." << endl;
+		return;
+	}
+
+	
+	prev->next = temp->next;
+	delete temp;
+	temp = NULL;
+}
+
+
+
+void del_complt_list(node*& head) 
+{
+	node* temp = head;
+	while (temp != NULL)
+     {
+		node* next_node = temp->next; 
+		delete temp;                  
+		temp = next_node;             
+	 }
+	head = NULL; 
+}
+
+void display(node* head)
+{
+	node* temp = head;
+	while (temp != NULL)
+	{
+		cout << temp->data << "| ";
+		temp = temp->next;
+	}
+	cout << endl;
+}
+
+int main()
+{
+	node* head = NULL;
+	int num;
+	cout << "How many nodes do you want to insert?" << endl;
+	cin >> num;
+
+	int data;
+	for (int i = 0; i < num; i++)
+	{
+		cout << "Enter data of node " << i + 1 << ": ";
+		cin >> data;
+		head = insert(data, head);
+	}
+	display(head);
+
+	// Deleting head node
+	del_at_head(head);
+	display(head);
+
+	//deletion ata tail
+	del_at_tail(head);
+	display(head);
+
+	int pos;
+	cout << "Enter the position of node to be deleted:";
+	cin >> pos;
+	del_at_pos(pos, head);
+	display(head);
+
+	bool del;
+	cout << "Enter 1 for to delete complt linked list (esle 0)" << endl;
+	cin >> del;
+	if (num==1)
+	{
+		del_complt_list(head);
+	}
+	else
+	{
+		display(head);
+	}
+	system("pause");
+	return 0;
+}
+}
