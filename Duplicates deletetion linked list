@@ -1,0 +1,133 @@
+#include <iostream>
+using namespace std;
+
+class node
+{
+public:
+	int data;
+	node* next;
+	node(int data)
+	{
+		this->data = data;
+		next = NULL;
+	}
+	~node()
+	{
+		int val = this->data;
+		if (next != NULL)
+		{
+			next = NULL;
+		}
+		cout << "the node containing  " << val << " is deleted" << endl;
+	}
+};
+
+node* insert(int d, node* head)
+{
+	node* new_node = new node(d);
+	if (head == NULL)
+	{
+		return new_node;
+	}
+
+	new_node->next = head;
+	head = new_node;
+	return head;
+}
+
+void bubble_sorting(node* head)
+{
+
+	node* prev;
+	node* temp;
+
+	while (head!= NULL)
+	{
+		prev = head;
+		temp = prev->next;
+
+		while (temp != NULL)
+		{
+			if (prev->data > temp->data)
+			{
+				int swap = prev->data;
+				prev->data = temp->data;
+				temp->data = swap;
+			}
+
+		
+			temp = temp->next;
+		}
+
+		head = head->next;
+	}
+}
+
+void duplicates(node* head)
+{
+	node* curr = head;
+
+	while (curr != NULL)
+	{
+		int count = 0;
+		node* temp = curr;
+		while (temp->next != NULL)
+		{
+			count++; 
+			if (curr->data == temp->next->data)
+			{
+				cout << "data at position " << count+1  << " is deleted" << endl;
+				node* duplicate = temp->next;
+				temp->next = duplicate->next;
+				delete duplicate;
+			}
+			else
+			{
+				temp = temp->next;
+			}
+		}
+		curr = curr->next;
+	}
+}
+
+
+void display(node* head)
+{
+	node* temp = head;
+	while (temp != NULL)
+	{
+		cout << temp->data << "| ";
+		temp = temp->next;
+	}
+	cout << endl;
+}
+
+int main()
+{
+	node* head = NULL;
+	int num;
+	cout << "How many nodes do you want to insert?" << endl;
+	cin >> num;
+	cout << "Note :       Data should be unsorted" << endl;
+	int data;
+	for (int i = 0; i < num; i++)
+	{
+		cout << "Enter data of node " << i + 1 << ": ";
+		cin >> data;
+		head = insert(data, head);
+	}
+	display(head);
+
+	//Sorting
+	bubble_sorting(head);
+	cout << "Sorted data is:";
+	display(head);
+
+	// Duplicates 
+	duplicates(head);
+	cout << "List after removing Duplicates" << endl;
+	display(head);
+
+	system("pause");
+	return 0;
+}
