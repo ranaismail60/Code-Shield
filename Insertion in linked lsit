@@ -1,0 +1,92 @@
+#include <iostream> using namespace std;
+class node 
+{
+ public: node* next; int data;
+node(int data) : data(data), next(nullptr) {}
+};
+// insert at the head
+node* insert_at_head(int d, node* head) 
+{ node* node_to_insert = new node(d); node_to_insert->next = head; return node_to_insert;
+}
+// insert at the tail
+node* insert_at_tail(int d, node* head)
+{ node* temp = new node(d); if (head == NULL) 
+{ return temp;
+} node* curr = head; while (curr->next != NULL) 
+{ curr = curr->next;
+} curr->next = temp; return head;
+}
+//  insert at a specific index
+node* insert_at_index(int d, int index, node* head)
+{ if (index < 0)
+{ cout << "Invalid index" << endl;
+return head;
+}
+if (index == 0) 
+{ return insert_at_head(d, head);
+}
+node* temp = new node(d); node* curr = head; int pos = 0;
+while (curr != NULL && pos < index - 1)
+{ curr = curr->next;
+pos++;
+}
+temp->next = curr->next; curr->next = temp; return head;
+}
+//  display nodes
+void display_nodes(node* head) 
+{ if (head == NULL)
+{ cout << "There is no node in the linked list" << endl;
+return;
+}
+node* temp = head; while (temp != NULL)
+{ cout << temp->data << " | "; temp = temp->next;
+}
+cout << endl;
+}
+int main() { node* head = NULL; int choice = 0;
+while (true)
+{ cout << "Press 1 for insert at Head" << endl; cout << "Press 2 for insert at Tail" << endl; cout << "Press 3 for insert at Specific Position" << endl;
+cout << "Press 4 to Display Nodes" << endl; cout << "Press 5 to Exit" << endl; cin >> choice;
+switch (choice) { case 1: 
+{ int num = 0;
+cout << "Enter the number of nodes you want to create" << endl;
+cin >> num;
+for (int i = 0; i < num; ++i) { int count;
+cout << "Enter the node data " << i + 1 << ": ";
+cin >> count;
+head = insert_at_head(count, head);
+}
+display_nodes(head);
+break;
+} case 2: 
+{ int num = 0;
+cout << "Enter the number of nodes you want to create" << endl;
+cin >> num;
+for (int i = 0; i < num; ++i) 
+{ int count;
+cout << "Enter the node data " << i + 1 << ": ";
+cin >> count;
+head = insert_at_tail(count, head);
+}
+display_nodes(head);
+break;
+} case 3:
+{ int data, index;
+cout << "Enter the data to insert: ";
+cin >> data;
+cout << "Enter the index at which to insert: ";
+cin >> index;
+head = insert_at_index(data, index, head);
+display_nodes(head);
+break;
+} case 4:
+display_nodes(head);
+break; case 5:
+return 0; default:
+cout << "Invalid choice! Please enter again." << endl;
+break;
+}
+}
+system("pause");
+return 0;
+}
