@@ -1,0 +1,148 @@
+#include <iostream>
+using namespace std;
+
+class heap
+{
+    int num;
+    int* arr;
+    int size;
+
+public:
+    heap(int size)
+    {
+        this->size = size;
+        arr = new int[size];
+        this->num = 0;
+    }
+
+    void insert(int key)
+    {
+        arr[num] = key;
+        int i = num;
+        num++;
+
+        while (i > 0)
+        {
+            int parent = (i - 1) / 2;
+            if (arr[parent] < arr[i])
+            {
+                // Swapping
+                int var = arr[i];
+                arr[i] = arr[parent];
+                arr[parent] = var;
+                i = parent;
+            }
+            else
+            {
+                return;
+            }
+        }
+    }
+
+    void display()
+    {
+        for (int i = 0; i < num; i++)
+        {
+            cout << arr[i] << "  ";
+        }
+        cout << endl;
+    }
+
+    void max_heapify(int arr[], int n, int i)
+    {
+        int largest = i;
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+
+        if (left < n && arr[left] > arr[largest])
+        {
+            largest = left;
+        }
+
+        if (right < n && arr[right] > arr[largest])
+        {
+            largest = right;
+        }
+
+        if (largest != i)
+        {
+            // Swap
+            int temp = arr[i];
+            arr[i] = arr[largest];
+            arr[largest] = temp;
+
+          
+            max_heapify(arr, n, largest);
+        }
+    }
+
+    void build_heap()
+    {
+        for (int i = num / 2 - 1; i >= 0; i--)
+        {
+            max_heapify(arr, num, i);
+        }
+    }
+
+    void heap_sort()
+    {
+        build_heap();
+        for (int i = num - 1; i >= 0; i--)
+        {
+            
+            int temp = arr[0];
+            arr[0] = arr[i];
+            arr[i] = temp;
+
+          
+            max_heapify(arr, i, 0);
+        }
+    }
+
+
+    void delete_root()
+    {
+        if (num <= 0)
+        {
+            cout << "Heap is empty!" << endl;
+            return;
+        }
+
+
+        arr[0] = arr[num - 1];
+        num--; 
+
+        max_heapify(arr, num, 0);
+    }
+};
+
+int main()
+{
+    int size = 0;
+    cout << "Enter the size of the Array: ";
+    cin >> size;
+
+    heap h(size);
+    cout << "Enter the elements: " << endl;
+    int value = 0;
+    for (int i = 0; i < size; i++)
+    {
+        cin >> value;
+        h.insert(value);
+    }
+
+    cout << "Heap before deleting root: ";
+    h.display();
+
+    h.delete_root();
+
+    cout << "Heap after deleting root: ";
+    h.display();
+ 
+    h.heap_sort();
+
+    cout << "Sorted array: ";
+    h.display();
+
+    return 0;
+}
